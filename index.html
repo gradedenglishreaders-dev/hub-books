@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graded English Readers Database</title>
+    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="icon" href="./study-icon.png" type="image/x-icon">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="header-top">
+            <div class="dev-badge-container">
+                <a id="dev-link" href="#" class="dev-badge">
+                    ✉️ Contact Developer
+                </a>
+            </div>
+            <div class="title-group">
+                <h1>Graded English Readers</h1>
+                <span class="total-badge"><span id="total-count">0</span> books</span>
+            </div>
+            <p class="subtitle"> Download graded readers of all levels from Telegram
+                <br>
+                <!--<a id="header-invite-link" href="#" target="_blank"
+                    style="display: inline-block; margin-top: 8px; color: #3b82f6; text-decoration: underline; font-size: 15px; font-weight: 500;">
+                    !!!! Долучитись до групи (якщо немає доступу)
+                </a>-->
+            </p>
+        </div>
+    </header>
+
+    <div class="sticky-controls">
+        <div class="controls-wrapper">
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="search-input" placeholder="Search for a book by title...">
+            </div>
+
+            <div class="filter-row" id="level-filters">
+                <button class="pill-btn lvl-btn active" data-level="all">All</button>
+                <button class="pill-btn lvl-btn cefr-btn" data-level="A0-A1">A0-A1</button>
+                <button class="pill-btn lvl-btn cefr-btn" data-level="A1">A1</button>
+                <button class="pill-btn lvl-btn cefr-btn" data-level="A2">A2</button>
+                <button class="pill-btn lvl-btn cefr-btn" data-level="A2-B1">A2-B1</button>
+                <button class="pill-btn lvl-btn cefr-btn" data-level="B1">B1</button>
+                <button class="pill-btn lvl-btn cefr-btn" data-level="B2">B2</button>
+                <button class="pill-btn lvl-btn cefr-btn" data-level="C1">C1</button>
+
+                <button class="pill-btn lvl-btn natgeo-btn" data-level="Footprint Reader"
+                    style="display: none;">Footprint</button>
+                <button class="pill-btn lvl-btn natgeo-btn" data-level="Page Turners" style="display: none;">Page
+                    Turners</button>
+                <button class="pill-btn lvl-btn natgeo-btn" data-level="Foundation Reader"
+                    style="display: none;">Foundation</button>
+                <button class="pill-btn lvl-btn natgeo-btn" data-level="Windows on Literacy"
+                    style="display: none;">Windows on Lit.</button>
+                <button class="pill-btn lvl-btn natgeo-btn" data-level="Reading Expedition"
+                    style="display: none;">Expedition</button>
+                <button class="pill-btn lvl-btn natgeo-btn" data-level="Theme Sets" style="display: none;">Theme
+                    Sets</button>
+
+                <button class="pill-btn lvl-btn blackcat-btn" data-level="Early Read" style="display: none;">Early
+                    Read</button>
+                <button class="pill-btn lvl-btn blackcat-btn" data-level="Green Apple" style="display: none;">Green
+                    Apple</button>
+                <button class="pill-btn lvl-btn blackcat-btn" data-level="Reading N Training"
+                    style="display: none;">Reading N Training</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="layout-container">
+        <aside class="sidebar">
+            <div class="sidebar-sticky">
+                <h3 class="sidebar-title">Publishers</h3>
+                <div class="filter-column" id="publisher-filters">
+                    <button class="sidebar-btn pub-btn active" data-pub="all">All Publishers</button>
+                    <button class="sidebar-btn pub-btn" data-pub="Penguin Readers">Penguin Readers</button>
+                    <button class="sidebar-btn pub-btn" data-pub="Cambridge Reader">Cambridge Reader</button>
+                    <button class="sidebar-btn pub-btn" data-pub="Macmillan Reader">Macmillan Reader</button>
+                    <button class="sidebar-btn pub-btn" data-pub="Black Cat">Black Cat</button>
+                    <button class="sidebar-btn pub-btn" data-pub="National Geographic">National Geographic</button>
+                    <button class="sidebar-btn pub-btn" data-pub="Step Into Reading">Step Into Reading</button>
+                    <button class="sidebar-btn pub-btn" data-pub="Oxford Bookworms">Oxford Bookworms</button>
+                    <button class="sidebar-btn pub-btn" data-pub="All Aboard Reading">All Aboard Reading</button>
+                    <button class="sidebar-btn pub-btn" data-pub="Easy Classic">Easy Classic</button>
+                    <button class="sidebar-btn pub-btn" data-pub="Who HQ Reader">Who HQ Reader</button>
+                </div>
+
+                <div class="ad-block" style="padding: 0; background: transparent; border: none; box-shadow: none;">
+
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <section id="books-container" class="books-grid">
+            </section>
+
+            <div class="load-more-container">
+                <button id="load-more-btn" style="display: none;">Show 40 more books</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Модальне вікно для зображень -->
+    <div id="image-modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modal-img">
+    </div>
+
+    <!-- Підключаємо Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+
+    <script src="script.js?v=8"></script>
+</body>
+
+</html>

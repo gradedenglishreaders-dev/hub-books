@@ -1,0 +1,915 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --border-color: #e2e8f0;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --primary-blue: #2563eb;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+.site-header {
+    padding: 40px 20px 20px 20px;
+    background-color: var(--bg-main);
+}
+
+.sticky-controls {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.header-top {
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto 20px auto;
+    position: relative;
+}
+
+.dev-badge-container {
+    position: absolute;
+    top: -20px;
+    right: 0;
+}
+
+.dev-badge {
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, #eff6ff, #e0f2fe);
+    color: #2563eb;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid #bfdbfe;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.05);
+}
+
+.dev-badge:hover {
+    background: linear-gradient(135deg, #e0f2fe, #bfdbfe);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(37, 99, 235, 0.1);
+}
+
+.title-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.title-group h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.total-badge {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 15px;
+    margin: 8px 0 0 0;
+}
+
+.controls-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    opacity: 0.5;
+}
+
+.search-container input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px 20px 16px 45px;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 16px;
+    color: var(--text-main);
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.search-container input:focus {
+    border-color: var(--primary-blue);
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.search-container input::placeholder {
+    color: #94a3b8;
+}
+
+.filter-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pill-btn {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pill-btn:hover {
+    background: #f1f5f9;
+    color: var(--text-main);
+}
+
+.pill-btn.active {
+    background: transparent;
+    color: inherit;
+    border-color: transparent;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.lvl-btn[data-level="A1"].active {
+    background: #d1fae5;
+    color: #047857;
+    border-color: #a7f3d0;
+}
+
+.lvl-btn[data-level="A2"].active {
+    background: #fef3c7;
+    color: #b45309;
+    border-color: #fde68a;
+}
+
+.lvl-btn[data-level="A2-B1"].active {
+    background: #ffedd5;
+    color: #c2410c;
+    border-color: #fed7aa;
+}
+
+.lvl-btn[data-level="B1"].active {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-color: #fecaca;
+}
+
+.lvl-btn[data-level="B2"].active {
+    background: #ede9fe;
+    color: #6d28d9;
+    border-color: #ddd6fe;
+}
+
+.lvl-btn[data-level="C1"].active {
+    background: #dbeafe;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+}
+
+.lvl-btn[data-level="all"].active {
+    background: #f1f5f9;
+    color: var(--text-main);
+    border-color: #cbd5e1;
+}
+
+.pub-btn[data-pub="Penguin Readers"].active {
+    background: #ffedd5;
+    color: #ea580c;
+    border-color: #fed7aa;
+}
+
+.pub-btn[data-pub="Cambridge Reader"].active {
+    background: #fce7f3;
+    color: #be185d;
+    border-color: #fbcfe8;
+}
+
+.pub-btn[data-pub="Macmillan Reader"].active {
+    background: #cffafe;
+    color: #0f766e;
+    border-color: #a5f3fc;
+}
+
+.pub-btn[data-pub="Black Cat"].active {
+    background: #f1f5f9;
+    color: #0f172a;
+    border-color: #cbd5e1;
+}
+
+.pub-btn[data-pub="National Geographic"].active {
+    background: #fef08a;
+    color: #854d0e;
+    border-color: #fde047;
+}
+
+.pub-btn[data-pub="Step Into Reading"].active {
+    background: #ccfbf1;
+    color: #0f766e;
+    border-color: #99f6e4;
+}
+
+.pub-btn[data-pub="Oxford Bookworms"].active {
+    background: #e0e7ff;
+    color: #3730a3;
+    border-color: #c7d2fe;
+}
+
+.pub-btn[data-pub="All Aboard Reading"].active {
+    background: #fee2e2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+
+.pub-btn[data-pub="Easy Classic"].active {
+    background: #fef3c7;
+    color: #92400e;
+    border-color: #fde68a;
+}
+
+.pub-btn[data-pub="Who HQ Reader"].active {
+    background: #f3e8ff;
+    color: #6b21a8;
+    border-color: #e9d5ff;
+}
+
+.lvl-btn[data-level="Footprint Reader"].active { background: #ffedd5; color: #c2410c; border-color: #fed7aa; }
+.lvl-btn[data-level="Page Turners"].active { background: #e0e7ff; color: #4338ca; border-color: #c7d2fe; }
+.lvl-btn[data-level="Foundation Reader"].active { background: #fae8ff; color: #a21caf; border-color: #f5d0fe; }
+.lvl-btn[data-level="Windows on Literacy"].active { background: #ffe4e6; color: #be123c; border-color: #fecdd3; }
+.lvl-btn[data-level="Reading Expedition"].active { background: #d1fae5; color: #047857; border-color: #a7f3d0; }
+.lvl-btn[data-level="Theme Sets"].active { background: #f3e8ff; color: #7e22ce; border-color: #e9d5ff; }
+
+.lvl-btn[data-level="Early Read"].active { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
+.lvl-btn[data-level="Green Apple"].active { background: #dcfce7; color: #15803d; border-color: #bbf7d0; }
+.lvl-btn[data-level="Reading N Training"].active { background: #ede9fe; color: #5b21b6; border-color: #ddd6fe; }
+
+.pub-btn[data-pub="all"].active {
+    background: #f1f5f9;
+    color: var(--text-main);
+    border-color: #cbd5e1;
+}
+
+/* Layout with sidebar */
+.layout-container {
+    display: flex;
+    max-width: 1600px;
+    margin: 40px auto;
+    padding: 0 20px;
+    gap: 30px;
+}
+
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+}
+
+.sidebar-sticky {
+    position: sticky;
+    top: 180px; /* Збільшений відступ, щоб не перекривалося верхньою панеллю */
+}
+
+.sidebar-title {
+    font-size: 16px;
+    color: var(--text-main);
+    margin: 0 0 16px 0;
+    padding-left: 12px;
+}
+
+.filter-column {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 30px;
+}
+
+.sidebar-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sidebar-btn:hover {
+    background: #f1f5f9;
+    color: var(--text-main);
+}
+
+.sidebar-btn.active {
+    background: #eff6ff;
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.ad-block {
+    background: #f8fafc;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    padding: 20px;
+}
+
+.main-content {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.books-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 колонок, бо зліва сайдбар */
+    gap: 24px;
+}
+
+.book-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    height: 100%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.book-card:hover {
+    transform: translateY(-6px);
+    border-color: #bfdbfe;
+    box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1);
+}
+
+.cover-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    width: 100%;
+}
+
+.cover-slider::-webkit-scrollbar {
+    display: none; /* Safari/Chrome */
+}
+
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #cbd5e1;
+    color: #333;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 10;
+    transition: all 0.2s;
+    opacity: 0; /* Приховано за замовчуванням */
+}
+
+.book-card:hover .slider-btn {
+    opacity: 1; /* З'являється при наведенні */
+}
+
+.slider-btn:hover {
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.prev-btn {
+    left: 8px;
+}
+
+.next-btn {
+    right: 8px;
+}
+
+.book-cover {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    background-color: #f1f5f9;
+    border-bottom: 1px solid var(--border-color);
+    scroll-snap-align: start;
+}
+
+.book-info {
+    padding: 16px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.book-info h3 {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-main);
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+    margin-top: auto;
+}
+
+.tag {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    border: 1px solid transparent;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.tag.level-A0-A1 {
+    background: #e0f2fe;
+    color: #0369a1;
+    border-color: #bae6fd;
+}
+
+.tag.level-A1 {
+    background: #d1fae5;
+    color: #047857;
+    border-color: #a7f3d0;
+}
+
+.tag.level-A2 {
+    background: #fef3c7;
+    color: #b45309;
+    border-color: #fde68a;
+}
+
+.tag.level-A2-B1 {
+    background: #ffedd5;
+    color: #c2410c;
+    border-color: #fed7aa;
+}
+
+.tag.level-B1 {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-color: #fecaca;
+}
+
+.tag.level-B2 {
+    background: #ede9fe;
+    color: #6d28d9;
+    border-color: #ddd6fe;
+}
+
+.tag.level-C1 {
+    background: #dbeafe;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+}
+
+.tag.level-Unknown {
+    background: #f1f5f9;
+    color: #64748b;
+    border-color: #e2e8f0;
+}
+
+.tag.pub-penguin {
+    background: #ffedd5;
+    color: #ea580c;
+    border-color: #fed7aa;
+}
+
+.tag.pub-cambridge {
+    background: #fce7f3;
+    color: #be185d;
+    border-color: #fbcfe8;
+}
+
+.tag.pub-macmillan {
+    background: #cffafe;
+    color: #0f766e;
+    border-color: #a5f3fc;
+}
+
+.tag.pub-default {
+    background: #f1f5f9;
+    color: #64748b;
+    border-color: #e2e8f0;
+}
+
+.tag.pub-black {
+    background: #f1f5f9;
+    color: #0f172a;
+    border-color: #cbd5e1;
+}
+
+.tag.pub-national {
+    background: #fef08a;
+    color: #854d0e;
+    border-color: #fde047;
+}
+
+.tag.pub-step {
+    background: #ccfbf1;
+    color: #0f766e;
+    border-color: #99f6e4;
+}
+
+.tag.pub-oxford {
+    background: #e0e7ff;
+    color: #3730a3;
+    border-color: #c7d2fe;
+}
+
+.tag.pub-all {
+    background: #fee2e2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+
+.tag.pub-easy {
+    background: #fef3c7;
+    color: #92400e;
+    border-color: #fde68a;
+}
+
+.tag.pub-who {
+    background: #f3e8ff;
+    color: #6b21a8;
+    border-color: #e9d5ff;
+}
+
+.tag.level-Footprint-Reader { background: #ffedd5; color: #c2410c; border-color: #fed7aa; }
+.tag.level-Page-Turners { background: #e0e7ff; color: #4338ca; border-color: #c7d2fe; }
+.tag.level-Foundation-Reader { background: #fae8ff; color: #a21caf; border-color: #f5d0fe; }
+.tag.level-Windows-on-Literacy { background: #ffe4e6; color: #be123c; border-color: #fecdd3; }
+.tag.level-Reading-Expedition { background: #d1fae5; color: #047857; border-color: #a7f3d0; }
+.tag.level-Theme-Sets { background: #f3e8ff; color: #7e22ce; border-color: #e9d5ff; }
+
+.tag.level-Early-Read { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
+.tag.level-Green-Apple { background: #dcfce7; color: #15803d; border-color: #bbf7d0; }
+.tag.level-Reading-N-Training { background: #ede9fe; color: #5b21b6; border-color: #ddd6fe; }
+
+.download-btn {
+    width: 100%;
+    background: #f8fafc;
+    color: var(--text-muted);
+    text-align: center;
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+.book-card:hover .download-btn {
+    background: var(--primary-blue);
+    color: white;
+    border-color: var(--primary-blue);
+}
+
+.load-more-container {
+    text-align: center;
+    margin: 40px 0;
+}
+
+#load-more-btn {
+    background: #ffffff;
+    color: var(--text-main);
+    border: 1px solid #cbd5e1;
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+#load-more-btn:hover {
+    background: #f1f5f9;
+    transform: scale(1.02);
+}
+
+@media (max-width: 1400px) {
+    .books-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .books-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .layout-container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+    }
+    .sidebar-sticky {
+        position: static;
+    }
+    .filter-column {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        scrollbar-width: none;
+    }
+    .filter-column::-webkit-scrollbar {
+        display: none;
+    }
+    .sidebar-btn {
+        flex-shrink: 0;
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 8px 16px;
+    }
+    .ad-block {
+        display: none; /* Ховаємо рекламу на мобільних за замовчуванням */
+    }
+}
+
+@media (max-width: 768px) {
+
+    .dev-badge-container {
+        position: static;
+        margin-bottom: 12px;
+        text-align: center;
+    }
+
+    .books-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+
+    .site-header {
+        padding: 25px 15px 15px 15px;
+    }
+
+    .title-group h1 {
+        font-size: 24px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+    .sticky-controls {
+        padding: 12px 15px;
+    }
+
+    .controls-wrapper {
+        gap: 10px;
+    }
+
+    .search-container input {
+        padding: 10px 16px 10px 38px;
+        font-size: 14px;
+        border-radius: 12px;
+    }
+
+    .search-icon {
+        left: 14px;
+        font-size: 15px;
+    }
+
+    .filter-row {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .filter-row::-webkit-scrollbar {
+        display: none;
+    }
+
+    .pill-btn {
+        flex-shrink: 0;
+        padding: 6px 14px;
+        font-size: 12px;
+    }
+
+    main {
+        padding: 20px 15px;
+    }
+
+    .book-cover {
+        height: 220px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .books-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .site-header {
+        padding: 15px 10px 10px 10px;
+    }
+
+    .title-group {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .title-group h1 {
+        font-size: 20px;
+        text-align: center;
+        line-height: 1.2;
+    }
+
+    .total-badge {
+        padding: 4px 10px;
+        font-size: 12px;
+    }
+
+    .subtitle {
+        display: none;
+    }
+
+    .sticky-controls {
+        padding: 10px;
+    }
+
+    main {
+        padding: 15px 10px;
+    }
+
+    .book-card {
+        border-radius: 12px;
+    }
+
+    .book-cover {
+        height: 170px;
+    }
+
+    .book-info {
+        padding: 10px;
+    }
+
+    .book-info h3 {
+        font-size: 13px;
+        margin-bottom: 8px;
+        line-height: 1.2;
+    }
+
+    .tags {
+        gap: 4px;
+        margin-bottom: 12px;
+    }
+
+    .tag {
+        padding: 3px 6px;
+        font-size: 9px;
+        border-radius: 4px;
+        letter-spacing: 0;
+    }
+
+    .download-btn {
+        padding: 8px;
+        font-size: 12px;
+        border-radius: 8px;
+    }
+}
+
+/* Modal styles */
+#image-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+#image-modal.show {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    max-width: 90%;
+    max-height: 90vh;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    object-fit: contain;
+    animation: zoomIn 0.3s ease;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #f8fafc;
+    font-size: 44px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: color 0.2s;
+    z-index: 1001;
+    line-height: 1;
+}
+
+.close-modal:hover {
+    color: #ef4444;
+}
+
+.book-cover {
+    cursor: zoom-in;
+}

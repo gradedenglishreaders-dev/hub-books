@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Парсер та Завантажувач Telegram Експорту</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; text-align: center; }
+        .container { max-width: 600px; margin: 0 auto; background: #f9f9f9; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input[type="file"] { margin: 20px 0; }
+        button { padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 10px; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        #status { margin-top: 20px; font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Завантаження книг у Firebase</h2>
+        <p>Обери файл <b>result.json</b> з папки експорту:</p>
+        
+        <input type="file" id="fileInput" accept=".json">
+        
+        <div id="status">Очікування файлу...</div>
+        
+        <button id="uploadBtn" disabled>Завантажити книги в базу даних</button>
+        <button id="downloadBtn" disabled style="background: #10b981;">Зберегти books.json</button>
+    </div>
+
+    <!-- Підключаємо Firebase (Compat версія) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC51Qc4m3GIKCKmnO_PyKVwLX15PcDs_-4",
+            authDomain: "gradedenglishreaders-ccdcb.firebaseapp.com",
+            databaseURL: "https://gradedenglishreaders-ccdcb-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "gradedenglishreaders-ccdcb",
+            storageBucket: "gradedenglishreaders-ccdcb.firebasestorage.app",
+            messagingSenderId: "433844412188",
+            appId: "1:433844412188:web:81fbcaa187186ab594a4d9"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
+
+        let parsedBooks = [];
+
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            document.getElementById('status').innerText = 'Читаємо файл...';
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    parseData(data);
+                } catch (error) {
+                    document.getElementById('status').innerText = 'Помилка читання JSON: ' + error.message;
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        function parseData(data) {
+            document.getElementById('status').innerText = 'Парсимо повідомлення...';
+            
+            parsedBooks = [];
+            let currentPhotos = [];
+            let currentLevel = 'Unknown';
+            let currentPublisher = 'Other';
+
+            if (!data.messages) {
+                document.getElementById('status').innerText = 'Це не схоже на експорт Telegram. Не знайдено масиву messages.';
+                return;
+            }
+
+            data.messages.forEach(msg => {
+                if (msg.type !== 'message') return;
+
+                if (msg.text_entities) {
+                    let tags = [];
+                    msg.text_entities.forEach(entity => {
+                        if (entity.type === 'hashtag') {
+                            tags.push(entity.text.toLowerCase());
+                        }
+                    });
+                    
+                    if (tags.length > 0) {
+                        const allTags = tags.join(" ");
+                        
+                        // Визначаємо видавництво
+                        if (allTags.includes('penguin')) currentPublisher = 'Penguin Readers';
+                        else if (allTags.includes('cambridge')) currentPublisher = 'Cambridge Reader';
+                        else if (allTags.includes('macmillan')) currentPublisher = 'Macmillan Reader';
+                        else if (allTags.includes('black_cat')) currentPublisher = 'Black Cat';
+                        else if (allTags.includes('national_geographic')) currentPublisher = 'National Geographic';
+                        else if (allTags.includes('step_into_reading')) currentPublisher = 'Step Into Reading';
+                        else if (allTags.includes('oxford_bookworms')) currentPublisher = 'Oxford Bookworms';
+                        else if (allTags.includes('all_aboard_reading')) currentPublisher = 'All Aboard Reading';
+                        else if (allTags.includes('easy_classic')) currentPublisher = 'Easy Classic';
+                        else if (allTags.includes('who_hq_reader')) currentPublisher = 'Who HQ Reader';
+
+                        // Визначаємо рівень з урахуванням видавництва
+                        // National Geographic subcategories
+                        if (allTags.includes('footprint_reader')) currentLevel = 'Footprint Reader';
+                        else if (allTags.includes('page_turners_reader')) currentLevel = 'Page Turners';
+                        else if (allTags.includes('foundation_reader')) currentLevel = 'Foundation Reader';
+                        else if (allTags.includes('windows_on_literacy')) currentLevel = 'Windows on Literacy';
+                        else if (allTags.includes('reading_expedition')) currentLevel = 'Reading Expedition';
+                        else if (allTags.includes('theme_sets')) currentLevel = 'Theme Sets';
+                        
+                        // Black Cat subcategories
+                        else if (allTags.includes('early_read')) currentLevel = 'Early Read';
+                        else if (allTags.includes('green_apple')) currentLevel = 'Green Apple';
+                        else if (allTags.includes('reading_n_training')) currentLevel = 'Reading N Training';
+                        
+                        // CEFR Levels
+                        else if (allTags.includes('a2-b1')) currentLevel = 'A2-B1';
+                        else if (allTags.includes('a0-a1')) currentLevel = 'A0-A1';
+                        else if (allTags.includes('a1')) currentLevel = 'A1';
+                        else if (allTags.includes('a2')) currentLevel = 'A2';
+                        else if (allTags.includes('b1')) currentLevel = 'B1';
+                        else if (allTags.includes('b2')) currentLevel = 'B2';
+                        else if (allTags.includes('c1')) currentLevel = 'C1';
+                        
+                        // Custom Levels
+                        else if (allTags.includes('level_0')) {
+                            if (currentPublisher === 'All Aboard Reading') currentLevel = 'A0-A1';
+                            else if (currentPublisher === 'Oxford Bookworms') currentLevel = 'A0-A1';
+                            else currentLevel = 'A0-A1'; // Default for Level 0
+                        }
+                        else if (allTags.includes('level_1')) {
+                            if (currentPublisher === 'Macmillan Reader') currentLevel = 'A0-A1';
+                            else if (currentPublisher === 'Step Into Reading') currentLevel = 'A0-A1';
+                            else if (currentPublisher === 'Who HQ Reader') currentLevel = 'A1-A2';
+                            else if (currentPublisher === 'Easy Classic') currentLevel = 'A1';
+                            else if (currentPublisher === 'Oxford Bookworms') currentLevel = 'A1';
+                            else currentLevel = 'A1';
+                        }
+                        else if (allTags.includes('level_2')) {
+                            if (currentPublisher === 'Macmillan Reader') currentLevel = 'A1';
+                            else if (currentPublisher === 'Step Into Reading') currentLevel = 'A1';
+                            else if (currentPublisher === 'All Aboard Reading') currentLevel = 'A1';
+                            else if (currentPublisher === 'Who HQ Reader') currentLevel = 'B1';
+                            else if (currentPublisher === 'Easy Classic') currentLevel = 'A2';
+                            else if (currentPublisher === 'Oxford Bookworms') currentLevel = 'A2';
+                            else currentLevel = 'A2';
+                        }
+                        else if (allTags.includes('level_3')) {
+                            if (currentPublisher === 'Macmillan Reader') currentLevel = 'A2';
+                            else if (currentPublisher === 'Step Into Reading') currentLevel = 'A2';
+                            else if (currentPublisher === 'All Aboard Reading') currentLevel = 'A2';
+                            else if (currentPublisher === 'Easy Classic') currentLevel = 'A2-B1';
+                            else if (currentPublisher === 'Oxford Bookworms') currentLevel = 'A2-B1';
+                            else currentLevel = 'A2-B1';
+                        }
+                        else if (allTags.includes('level_4')) {
+                            if (currentPublisher === 'Macmillan Reader') currentLevel = 'A2-B1';
+                            else if (currentPublisher === 'Step Into Reading') currentLevel = 'A2-B1';
+                            else if (currentPublisher === 'All Aboard Reading') currentLevel = 'A2-B1';
+                            else if (currentPublisher === 'Oxford Bookworms') currentLevel = 'B1';
+                            else currentLevel = 'B1';
+                        }
+                        else if (allTags.includes('level_5')) {
+                            if (currentPublisher === 'Macmillan Reader') currentLevel = 'B1';
+                            else if (currentPublisher === 'Step Into Reading') currentLevel = 'B1';
+                            else if (currentPublisher === 'Oxford Bookworms') currentLevel = 'B2';
+                            else currentLevel = 'B2';
+                        }
+                        else if (allTags.includes('level_6')) {
+                            if (currentPublisher === 'Macmillan Reader') currentLevel = 'B2';
+                            else if (currentPublisher === 'Oxford Bookworms') currentLevel = 'C1';
+                            else currentLevel = 'C1';
+                        }
+                        else if (allTags.includes('starter')) currentLevel = 'A0-A1'; // Cambridge Starter = A0-A1
+                        else if (allTags.includes('beginner')) currentLevel = 'A1';
+                        else if (allTags.includes('elementary')) currentLevel = 'A2';
+                        else if (allTags.includes('pre_intermediate')) currentLevel = 'A2';
+                        else if (allTags.includes('lower_intermediate')) currentLevel = 'A2-B1';
+                        else if (allTags.includes('intermediate')) currentLevel = 'B1';
+                        else if (allTags.includes('upper_intermediate') || allTags.includes('upper')) currentLevel = 'B2';
+                        else if (allTags.includes('advanced')) currentLevel = 'C1';
+                    }
+                }
+
+                if (msg.photo) {
+                    // Перевіряємо чи є хештеги у цьому повідомленні (це означає, що це головний пост)
+                    const hasTags = msg.text_entities && msg.text_entities.some(e => e.type === 'hashtag');
+                    
+                    if (hasTags) {
+                        currentPhotos = [msg.photo]; // Старт нової книги
+                    } else {
+                        // Якщо хештегів немає, це додаткове фото до попередньої книги
+                        // Додаємо його тільки якщо ми вже почали збирати фото для якоїсь книги
+                        if (currentPhotos.length > 0) {
+                            currentPhotos.push(msg.photo);
+                        } else {
+                            currentPhotos = [msg.photo]; // На випадок якщо книга взагалі без хештегів
+                        }
+                    }
+                }
+
+                if (msg.file && msg.mime_type === 'application/pdf') {
+                    const title = msg.file_name.replace('.pdf', '').replace(/_/g, ' ').trim();
+                    
+                    parsedBooks.push({
+                        title: title,
+                        publisher: currentPublisher,
+                        level: currentLevel !== 'Unknown' ? currentLevel : ((currentPublisher === 'National Geographic' || currentPublisher === 'Black Cat') ? 'Unknown' : 'B1'),
+                        coverUrls: [...currentPhotos], // Зберігаємо копію масиву всіх зібраних фото
+                        message_id: msg.id
+                    });
+                }
+            });
+
+            document.getElementById('status').innerText = `Готово! Знайдено ${parsedBooks.length} книг. Можна завантажувати в базу.`;
+            document.getElementById('uploadBtn').disabled = false;
+            document.getElementById('downloadBtn').disabled = false;
+        }
+
+        document.getElementById('uploadBtn').addEventListener('click', async () => {
+            if (parsedBooks.length === 0) return;
+            
+            document.getElementById('status').innerText = 'Йде завантаження у Firebase... Будь ласка, зачекайте.';
+            document.getElementById('uploadBtn').disabled = true;
+
+            try {
+                // Зберігаємо масив книг по шляху "books"
+                await database.ref('books').set(parsedBooks);
+                document.getElementById('status').innerHTML = '✅ <b>УСПІХ!</b> Всі книги успішно завантажені в базу даних. Тепер відкрий <b>index.html</b>!';
+            } catch (error) {
+                console.error("Помилка запису в Firebase: ", error);
+                document.getElementById('status').innerText = '❌ Помилка запису: ' + error.message;
+                document.getElementById('uploadBtn').disabled = false;
+            }
+        });
+
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            if (parsedBooks.length === 0) return;
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(parsedBooks));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href",     dataStr);
+            downloadAnchorNode.setAttribute("download", "books.json");
+            document.body.appendChild(downloadAnchorNode); // required for firefox
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            document.getElementById('status').innerHTML = '✅ <b>Файл books.json збережено!</b> Покладіть його в папку поруч із index.html.';
+        });
+    </script>
+</body>
+</html>
