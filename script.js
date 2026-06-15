@@ -59,6 +59,10 @@ async function fetchBooks() {
 
         const data = await response.json();
         allBooks = Array.isArray(data) ? data : Object.values(data);
+        
+        // Сортуємо книги за датою додавання в канал (за message_id, новіші - зверху)
+        allBooks.sort((a, b) => (b.message_id || 0) - (a.message_id || 0));
+        
         filteredBooks = [...allBooks];
         
         console.log(`Успішно завантажено ${allBooks.length} книг.`);
