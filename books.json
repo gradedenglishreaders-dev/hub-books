@@ -23293,41 +23293,5 @@
       "photos/photo_4629@29-05-2026_07-43-47.jpg"
     ],
     "message_id": 7039
-  },
-  {
-    "title": "1кл Ядс 1 част (3)",
-    "publisher": "Penguin Readers",
-    "level": "B2",
-    "coverUrls": [
-      "photos/cover_11.webp"
-    ],
-    "message_id": 11
-  },
-  {
-    "title": "словник 15",
-    "publisher": "Penguin Readers",
-    "level": "Penguin Kids",
-    "coverUrls": [
-      "photos/cover_13.webp"
-    ],
-    "message_id": 13
-  },
-  {
-    "title": "Урок B1 на 2 ст",
-    "publisher": "Oxford Bookworms",
-    "level": "C1",
-    "coverUrls": [
-      "photos/cover_19.webp"
-    ],
-    "message_id": 19
-  },
-  {
-    "title": "Clara and Clem Take a Ride",
-    "publisher": "Penguin Readers",
-    "level": "Penguin Young Reader",
-    "coverUrls": [
-      "photos/cover_24.webp"
-    ],
-    "message_id": 24
   }
 ]
