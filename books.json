@@ -23311,5 +23311,14 @@
       "photos/cover_13.webp"
     ],
     "message_id": 13
+  },
+  {
+    "title": "Урок B1 на 2 ст",
+    "publisher": "Oxford Bookworms",
+    "level": "C1",
+    "coverUrls": [
+      "photos/cover_19.webp"
+    ],
+    "message_id": 19
   }
 ]
