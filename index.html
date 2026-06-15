@@ -88,7 +88,16 @@
     <div class="layout-container">
         <aside class="sidebar">
             <div class="sidebar-sticky">
-                <h3 class="sidebar-title">Publishers</h3>
+                <div class="sidebar-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h3 class="sidebar-title" style="margin-bottom: 0;">Publishers</h3>
+                    <label class="shuffle-toggle" title="Randomize books">
+                        <span class="shuffle-label">Shuffle</span>
+                        <div class="switch-wrapper">
+                            <input type="checkbox" id="shuffle-checkbox" checked>
+                            <span class="switch-slider"></span>
+                        </div>
+                    </label>
+                </div>
                 <div class="filter-column" id="publisher-filters">
                     <button class="sidebar-btn pub-btn active" data-pub="all">All Publishers</button>
                     <button class="sidebar-btn pub-btn" data-pub="Penguin Readers">Penguin Readers</button>

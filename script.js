@@ -52,19 +52,19 @@ async function fetchBooks() {
         console.log("Завантажуємо свіжий books.json...");
         // Додаємо випадковий параметр, щоб браузер не кешував старий файл
         const response = await fetch(`books.json?v=${new Date().getTime()}`);
-        
+
         if (!response.ok) {
             throw new Error(`Помилка HTTP: ${response.status}`);
         }
 
         const data = await response.json();
         allBooks = Array.isArray(data) ? data : Object.values(data);
-        
+
         // Сортуємо книги за датою додавання в канал (за message_id, новіші - зверху)
         allBooks.sort((a, b) => (b.message_id || 0) - (a.message_id || 0));
-        
+
         filteredBooks = [...allBooks];
-        
+
         console.log(`Успішно завантажено ${allBooks.length} книг.`);
 
         // Перевіряємо, чи є книги у видавництв. Якщо ні - додаємо (Stay Tuned) червоним
@@ -86,7 +86,7 @@ async function fetchBooks() {
             const currentVal = parseInt(totalCount.textContent) || 0;
             animateValue(totalCount, currentVal, allBooks.length, 1200);
         }
-        
+
         // Рендеримо з перемішуванням при першому завантаженні
         filterBooks(true);
     } catch (error) {
@@ -199,14 +199,17 @@ function filterBooks(shouldShuffle = false) {
         return matchesSearch && matchesPub && matchesLvl;
     });
 
-    if (shouldShuffle) {
-        // Якщо клікнули на кнопку фільтра — перемішуємо результати
+    const shuffleCheckbox = document.getElementById('shuffle-checkbox');
+    const isShuffleOn = shuffleCheckbox ? shuffleCheckbox.checked : true; // За замовчуванням true, якщо раптом елемента немає
+
+    if (shouldShuffle && isShuffleOn) {
+        // Якщо клікнули на кнопку фільтра і тумблер УВІМКНЕНО — перемішуємо результати
         for (let i = filteredBooks.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [filteredBooks[i], filteredBooks[j]] = [filteredBooks[j], filteredBooks[i]];
         }
-    } else if (searchTerm !== '') {
-        // Якщо працює пошук — сортуємо за новизною
+    } else if (searchTerm !== '' || !isShuffleOn) {
+        // Якщо працює пошук АБО тумблер ВИМКНЕНО — сортуємо за новизною (датою)
         filteredBooks.sort((a, b) => (b.message_id || 0) - (a.message_id || 0));
     } else {
         // Якщо це просто рендер після "Показати ще" або щось інше, де shouldShuffle=false і немає пошуку
@@ -218,6 +221,16 @@ function filterBooks(shouldShuffle = false) {
 
 // Обробники подій для пошуку (без перемішування)
 searchInput.addEventListener('input', () => filterBooks(false));
+
+// Обробник для тумблера перемішування
+const shuffleCheckboxElem = document.getElementById('shuffle-checkbox');
+if (shuffleCheckboxElem) {
+    shuffleCheckboxElem.addEventListener('change', () => {
+        // Якщо тумблер увімкнули або вимкнули, оновлюємо видачу. 
+        // Якщо ввімкнули - перемішуємо. Якщо вимкнули - відсортує за датою.
+        filterBooks(shuffleCheckboxElem.checked);
+    });
+}
 
 // Обробники для кнопок видавництва
 pubButtons.forEach(btn => {
@@ -249,17 +262,17 @@ pubButtons.forEach(btn => {
             document.querySelectorAll('.cefr-btn').forEach(el => el.style.display = 'inline-block');
             document.querySelectorAll('.natgeo-btn').forEach(el => el.style.display = 'none');
             document.querySelectorAll('.blackcat-btn').forEach(el => el.style.display = 'none');
-            
+
             // Якщо Penguin Readers - показуємо його кнопки
             if (currentPubFilter === 'Penguin Readers') {
                 document.querySelectorAll('.penguin-btn').forEach(el => el.style.display = 'inline-block');
                 document.querySelectorAll('.macmillan-btn').forEach(el => el.style.display = 'none');
-            } 
+            }
             // Якщо Macmillan - показуємо його кнопки
             else if (currentPubFilter === 'Macmillan Reader') {
                 document.querySelectorAll('.macmillan-btn').forEach(el => el.style.display = 'inline-block');
                 document.querySelectorAll('.penguin-btn').forEach(el => el.style.display = 'none');
-            } 
+            }
             // В інших випадках ховаємо
             else {
                 document.querySelectorAll('.penguin-btn').forEach(el => el.style.display = 'none');
