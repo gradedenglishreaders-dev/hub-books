@@ -49,20 +49,45 @@ const loadMoreBtn = document.getElementById('load-more-btn');
 // Функція для завантаження даних (тепер тільки статичний books.json)
 async function fetchBooks() {
     try {
+        console.log("Завантажуємо свіжий books.json...");
+        // Додаємо випадковий параметр, щоб браузер не кешував старий файл
+        const response = await fetch(`books.json?v=${new Date().getTime()}`);
+        
+        if (!response.ok) {
+            throw new Error(`Помилка HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+        allBooks = Array.isArray(data) ? data : Object.values(data);
+        filteredBooks = [...allBooks];
+        
+        console.log(`Успішно завантажено ${allBooks.length} книг.`);
+
+        // Перевіряємо, чи є книги у видавництв. Якщо ні - додаємо (Stay Tuned) червоним
+        pubButtons.forEach(btn => {
+            const pubName = btn.dataset.pub;
+            if (pubName !== 'all') {
+                const hasBooks = allBooks.some(b => b.publisher === pubName);
+                if (!hasBooks && ['Easy Classic', 'Who HQ Reader', 'Step Into Reading', 'Oxford Bookworms'].includes(pubName)) {
+                    btn.innerHTML = `${pubName} <span style="color: #ef4444; font-size: 11px; margin-left: 4px;">(Stay Tuned)</span>`;
+                    btn.disabled = true;
+                    btn.style.opacity = '0.7';
+                } else {
+                    btn.innerHTML = pubName;
+                }
+            }
+        });
 
         if (totalCount) {
             const currentVal = parseInt(totalCount.textContent) || 0;
             animateValue(totalCount, currentVal, allBooks.length, 1200);
         }
+        
         renderBooks(true);
-    } else {
-        console.log("Даних немає ні в кеші, ні в базі");
-        booksContainer.innerHTML = '<p style="text-align: center; width: 100%; color: var(--text-muted);">Books are not loaded in the database yet.</p>';
+    } catch (error) {
+        console.error("Помилка завантаження книг:", error);
+        booksContainer.innerHTML = '<p class="error-msg" style="text-align: center; grid-column: 1/-1; color: var(--text-color);">Oops! Failed to load books. Please refresh the page.</p>';
     }
-} catch (error) {
-    console.error('Помилка завантаження з Firebase:', error);
-    booksContainer.innerHTML = '<p style="text-align: center; width: 100%; color: #ef4444;">Database connection error. Please try refreshing.</p>';
-}
 }
 
 // Рендер книг
