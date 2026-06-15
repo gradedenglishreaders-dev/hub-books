@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
     --bg-main: #f8fafc;
@@ -46,6 +45,16 @@ body {
     position: absolute;
     top: -20px;
     right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.dev-badge-icon {
+    vertical-align: middle;
+    margin-right: 6px;
+    border-radius: 2px;
 }
 
 .dev-badge {
@@ -415,6 +424,35 @@ body {
 
 .shuffle-toggle:hover .shuffle-label {
     color: #3b82f6;
+}
+
+.shuffle-container {
+    margin-top: 12px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 12px;
+}
+
+.shuffle-switch-wrapper {
+    margin: 0;
+    display: inline-block;
+}
+
+.shuffle-label-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    user-select: none;
+}
+
+.ad-empty {
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .switch-wrapper {

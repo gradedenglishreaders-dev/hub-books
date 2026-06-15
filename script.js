@@ -112,7 +112,7 @@ function renderBooks(reset = true) {
     const startIndex = reset ? 0 : currentDisplayedCount - ITEMS_PER_PAGE;
     const booksToDisplay = filteredBooks.slice(startIndex, currentDisplayedCount);
 
-    booksToDisplay.forEach(book => {
+    booksToDisplay.forEach((book, index) => {
         try {
             const card = document.createElement('div');
             card.className = 'book-card';
@@ -120,13 +120,19 @@ function renderBooks(reset = true) {
             // Формуємо динамічне посилання на завантаження
             const downloadLink = `${BASE_CHANNEL_URL}/${book.message_id}`;
 
+            // Визначаємо, чи це одна з перших 8 книг на екрані (для оптимізації LCP)
+            const isLcpCandidate = startIndex === 0 && index < 8;
+            const loadingAttr = isLcpCandidate ? 'fetchpriority="high"' : 'loading="lazy"';
+
             // Формуємо HTML для картинок (слайдер з кнопками та lazy load)
             let imagesHtml = '';
             let sliderControls = '';
             if (Array.isArray(book.coverUrls) && book.coverUrls.length > 1) {
-                imagesHtml = book.coverUrls.map((url, index) => {
+                imagesHtml = book.coverUrls.map((url, imgIndex) => {
                     const optimizedUrl = getImageUrl(url);
-                    return `<img src="${optimizedUrl}" data-original="${url}" loading="lazy" alt="Cover" class="book-cover" onclick="openModal(this.dataset.original)" onerror="this.src='study-icon.png'">`;
+                    // Для слайдера: тільки перша картинка завантажується швидко
+                    const currentLoadingAttr = (imgIndex === 0 && isLcpCandidate) ? 'fetchpriority="high"' : 'loading="lazy"';
+                    return `<img src="${optimizedUrl}" data-original="${url}" ${currentLoadingAttr} alt="Cover" class="book-cover" onclick="openModal(this.dataset.original)" onerror="this.src='study-icon.png'">`;
                 }).join('');
                 sliderControls = `
                     <button class="slider-btn prev-btn" onclick="event.preventDefault(); this.parentElement.querySelector('.cover-slider').scrollBy({left: -200, behavior: 'smooth'})">❮</button>
@@ -135,11 +141,11 @@ function renderBooks(reset = true) {
             } else if (Array.isArray(book.coverUrls) && book.coverUrls.length === 1) {
                 const url = book.coverUrls[0];
                 const optimizedUrl = getImageUrl(url);
-                imagesHtml = `<img src="${optimizedUrl}" data-original="${url}" loading="lazy" alt="Cover" class="book-cover" onclick="openModal(this.dataset.original)" onerror="this.src='study-icon.png'">`;
+                imagesHtml = `<img src="${optimizedUrl}" data-original="${url}" ${loadingAttr} alt="Cover" class="book-cover" onclick="openModal(this.dataset.original)" onerror="this.src='study-icon.png'">`;
             } else {
                 const url = book.coverUrl || 'study-icon.png';
                 const optimizedUrl = getImageUrl(url);
-                imagesHtml = `<img src="${optimizedUrl}" data-original="${url}" loading="lazy" alt="Cover" class="book-cover" onclick="openModal(this.dataset.original)" onerror="this.src='study-icon.png'">`;
+                imagesHtml = `<img src="${optimizedUrl}" data-original="${url}" ${loadingAttr} alt="Cover" class="book-cover" onclick="openModal(this.dataset.original)" onerror="this.src='study-icon.png'">`;
             }
 
             const pubClass = book.publisher && typeof book.publisher === 'string' ? book.publisher.split(' ')[0].toLowerCase() : 'default';

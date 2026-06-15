@@ -7,6 +7,12 @@
     <title>Graded English Readers Database | Download Books</title>
     <meta name="google-site-verification" content="0xX9wOhdfiw0hwW4btIvYBlFtwuIpYAVjCvvXdfnWwY" />
 
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://wsrv.nl">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <!-- SEO Meta Tags -->
     <meta name="description"
         content="Download graded English readers of all levels (A1, A2, B1, B2, C1). Free English books from Penguin Readers, Macmillan, Black Cat, National Geographic and more.">
@@ -30,11 +36,9 @@
 <body>
     <header class="site-header">
         <div class="header-top">
-            <div class="dev-badge-container"
-                style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+            <div class="dev-badge-container">
                 <a id="dev-link" href="https://t.me/An1sov" class="dev-badge">
-                    <svg width="16" height="12" viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"
-                        style="vertical-align: middle; margin-right: 6px; border-radius: 2px;">
+                    <svg width="16" height="12" viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg" class="dev-badge-icon">
                         <rect width="24" height="8" fill="#0057B7" />
                         <rect y="8" width="24" height="8" fill="#FFD700" />
                     </svg> Contact Developer
@@ -63,7 +67,7 @@
         <div class="controls-wrapper">
             <div class="search-container">
                 <span class="search-icon">🔍</span>
-                <input type="text" id="search-input" placeholder="Search for a book by title...">
+                <input type="text" id="search-input" placeholder="Search for a book by title..." aria-label="Search for a book by title">
             </div>
 
             <div class="filter-row" id="level-filters">
@@ -127,10 +131,9 @@
                     <button class="sidebar-btn pub-btn" data-pub="Who HQ Reader">Who HQ Reader</button>
                 </div>
 
-                <div
-                    style="margin-top: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 8px; padding-left: 12px;">
-                    <label class="switch-wrapper" style="margin: 0; display: inline-block;">
-                        <input type="checkbox" id="shuffle-checkbox" checked>
+                <div class="shuffle-container">
+                    <label class="switch-wrapper shuffle-switch-wrapper">
+                        <input type="checkbox" id="shuffle-checkbox" checked aria-label="Toggle random shuffle">
                         <span class="switch-slider"></span>
                     </label>
                     <script>
@@ -138,11 +141,11 @@
                             document.getElementById('shuffle-checkbox').checked = false;
                         }
                     </script>
-                    <span style="font-size: 13px; font-weight: 500; color: #64748b; cursor: pointer; user-select: none;"
+                    <span class="shuffle-label-text"
                         onclick="document.getElementById('shuffle-checkbox').click()">Randomize</span>
                 </div>
 
-                <div class="ad-block" style="padding: 0; background: transparent; border: none; box-shadow: none;">
+                <div class="ad-block ad-empty">
 
                 </div>
             </div>
@@ -164,11 +167,7 @@
         <img class="modal-content" id="modal-img">
     </div>
 
-    <!-- Підключаємо Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
-
-    <script src="script.js?v=8"></script>
+    <script src="script.js?v=8" defer></script>
 </body>
 
 </html>
