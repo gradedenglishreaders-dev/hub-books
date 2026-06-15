@@ -198,6 +198,17 @@ function filterBooks() {
         return matchesSearch && matchesPub && matchesLvl;
     });
 
+    // Якщо не вибрано конкретного рівня і немає пошуку — перемішуємо в різнобій
+    if (currentLvlFilter === 'all' && searchTerm === '') {
+        for (let i = filteredBooks.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [filteredBooks[i], filteredBooks[j]] = [filteredBooks[j], filteredBooks[i]];
+        }
+    } else {
+        // Якщо вибрано рівень або є пошук — сортуємо за новизною
+        filteredBooks.sort((a, b) => (b.message_id || 0) - (a.message_id || 0));
+    }
+
     renderBooks(true);
 }
 
